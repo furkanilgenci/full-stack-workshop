@@ -22,10 +22,16 @@ router.get('/:id', async (req, res) => {
   res.send(user)
 })
 
-router.post('/:id/attended-courses', async (req, res) => {
+router.post('/:id/attended-courses', async (req, res, next) => {
+  if (!req.body._id) {
+    const err = new Error('You should provide the course id in body as _id')
+    err.status = 401
+
+    return next(err)
+  }
+
   const user = await User.findById(req.params.id)
 
-  // eslint-disable-next-line no-underscore-dangle
   const course = await Course.findById(req.body._id)
 
   await user.attendToCourse(course)

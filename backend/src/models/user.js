@@ -22,6 +22,13 @@ userSchema.plugin(autopopulate)
 userSchema.loadClass(
   class {
     async attendToCourse(course) {
+      if (course.participants.some(el => el._id.equals(this._id))) {
+        const err = new Error('Already attended')
+        err.status = 400
+
+        throw err
+      }
+
       this.attendedCourses.push(course)
       course.participants.push(this)
 
