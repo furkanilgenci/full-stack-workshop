@@ -15,4 +15,12 @@ router.post('/', async (req, res) => {
   res.status(201).send(course)
 })
 
+router.get('/:id', async (req, res) => {
+  const course = await Course.findById(req.params.id)
+
+  if (!course) return res.sendStatus(404)
+
+  res.send(course)
+})
+
 module.exports = router
